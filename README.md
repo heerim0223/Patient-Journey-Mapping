@@ -8,8 +8,9 @@
 
 ### 1. Time-Based Event Sequence
 > A chronological list of patient events along the hospitalization timeline:
-> 
-> ```ADMISSION → TRANSFER → ICU → WARD → DISCHARGE / DEATH```
+> ```
+> ADMISSION → TRANSFER → ICU → WARD → DISCHARGE / DEATH
+> ```
 
 This sequence represents the progression of a patient through different clinical locations and outcomes during a single hospital stay.
 
@@ -42,19 +43,14 @@ These visualizations help illustrate patient movement patterns and outcome distr
 
 ### 3. Automated Clinical Summary Generation
 > Automatically generated summary for each patient:
-> 
+> ```
 > Total Length of Stay: 12.4 days
-> 
 > ICU Stay: Yes (3.2 days)
-> 
 > Primary Diagnosis: Sepsis
-> 
 > Key Laboratory Trends:
-> 
 > WBC ↑ (Day 1–2)
-> 
 > CRP ↓ (After Day 4)
-> 
+> ```
 > Outcome: Discharged Alive
 
 This summary provides a concise overview of the patient’s clinical course, key laboratory changes, and final outcome.
