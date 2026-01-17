@@ -2,26 +2,61 @@
 
 <img width="1005" height="697" alt="Image" src="https://github.com/user-attachments/assets/980afaaa-e5e8-460c-9498-8211e7a48f70" />
 
-필요한 것:
-```
-1. 시간축 기반 이벤트 리스트
-    ADMISSION → TRANSFER → ICU → WARD → DISCHARGE/DEATH
+---
 
-2. Sankey / flow 시각화
-    전체 환자 기준
-    ER → ICU → Ward → Discharge
-    ER → Ward → Death
-    환자 수 기준 Sankey
-    matplotlib + sankey 또는 plotly (Tkinter에 embed)
+# Functional necessities
 
-3. summary 자동 생성
-    총 입원 기간: 12.4 days
-    ICU 체류: Yes (3.2 days)
-    주요 진단: Sepsis
-    주요 검사 변화:
-    WBC ↑ (Day 1–2)
-    CRP ↓ (Day 4 이후)
-    Outcome: Discharged Alive
-```
+### 1. Time-Based Event Sequence
+> A chronological list of patient events along the hospitalization timeline:
+> 
+> ```ADMISSION → TRANSFER → ICU → WARD → DISCHARGE / DEATH```
+
+This sequence represents the progression of a patient through different clinical locations and outcomes during a single hospital stay.
+
+### 2. Sankey / Flow Visualization
+> Visualization of patient flow across hospital units and outcomes.
+> 
+> Flow Scenarios (All Patients)
+> 
+> ER → ICU → Ward → Discharge
+> 
+> ER → Ward → Death
+> 
+> Visualization Details
+> 
+> Metric: Number of patients
+> 
+> Chart Type: Sankey diagram
+> 
+> Libraries:
+> 
+> > matplotlib (with Sankey module), or
+> > 
+> > plotly (recommended for interactive visualization)
+> > 
+> GUI Integration:
+> 
+> > Can be embedded into a Tkinter application
+
+These visualizations help illustrate patient movement patterns and outcome distributions across care units.
+
+### 3. Automated Clinical Summary Generation
+> Automatically generated summary for each patient:
+> 
+> Total Length of Stay: 12.4 days
+> 
+> ICU Stay: Yes (3.2 days)
+> 
+> Primary Diagnosis: Sepsis
+> 
+> Key Laboratory Trends:
+> 
+> WBC ↑ (Day 1–2)
+> 
+> CRP ↓ (After Day 4)
+> 
+> Outcome: Discharged Alive
+
+This summary provides a concise overview of the patient’s clinical course, key laboratory changes, and final outcome.
 
 [SQL 테이블](https://www.notion.so/SQL-2ebb67426ab180a892fcf3356d6c67ce?source=copy_link)
