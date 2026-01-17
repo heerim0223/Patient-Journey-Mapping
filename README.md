@@ -29,15 +29,9 @@ This sequence represents the progression of a patient through different clinical
 > 
 > Chart Type: Sankey diagram
 > 
-> Libraries:
+> Libraries:matplotlib (with Sankey module), or plotly (recommended for interactive visualization)
 > 
-> > matplotlib (with Sankey module), or
-> > 
-> > plotly (recommended for interactive visualization)
-> > 
-> GUI Integration:
-> 
-> > Can be embedded into a Tkinter application
+> GUI Integration: Can be embedded into a Tkinter application
 
 These visualizations help illustrate patient movement patterns and outcome distributions across care units.
 
@@ -50,8 +44,8 @@ These visualizations help illustrate patient movement patterns and outcome distr
 > Key Laboratory Trends:
 > WBC ↑ (Day 1–2)
 > CRP ↓ (After Day 4)
-> ```
 > Outcome: Discharged Alive
+> ```
 
 This summary provides a concise overview of the patient’s clinical course, key laboratory changes, and final outcome.
 
