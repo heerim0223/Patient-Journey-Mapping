@@ -1,5 +1,7 @@
 # Patient-Journey-Mapping
 
+<img width="1005" height="697" alt="Image" src="https://github.com/user-attachments/assets/980afaaa-e5e8-460c-9498-8211e7a48f70" />
+
 필요한 것:
 ```
 1. 시간축 기반 이벤트 리스트
