@@ -9,7 +9,20 @@
 ### 1. Time-Based Event Sequence
 > A chronological list of patient events along the hospitalization timeline:
 > ```
-> ADMISSION → TRANSFER → ICU → WARD → DISCHARGE / DEATH
+> ER (Start)
+> ├── Discharge / Death / Transfer (Final)
+> ├── ICU
+> │    ├── Discharge / Death / Transfer (Final)
+> │    └── Ward
+> │         ├── Discharge / Death / Transfer (Final)
+> │         └── **ICU (Readmission)**
+> │              └── Discharge / Death (Final)
+> └── Ward
+>      ├── Discharge / Death / Transfer (Final)
+>      └── ICU (Transfer)
+>           ├── Discharge / Death / Transfer (Final)
+>           └── Ward (Back to Ward)
+>                └── Discharge / Death (Final)
 > ```
 
 This sequence represents the progression of a patient through different clinical locations and outcomes during a single hospital stay.
