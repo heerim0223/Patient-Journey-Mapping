@@ -56,6 +56,7 @@ class PatientJourneyApp:
         self.entry.insert(0, "Search...")
         self.entry.bind("<FocusIn>", lambda e: self.entry.delete(0, END) if self.entry.get()=="Search..." else None)
         self.entry.grid(row=0, column=1, padx=5, pady=5, sticky="w")
+        self.entry.bind("<Return>", self.apply_filter)
 
         # 검색 버튼
         Button(frame1, text="Search", width=8, command=self.apply_filter).grid(row=0, column=2, padx=5, pady=5, sticky="w")
@@ -89,7 +90,7 @@ class PatientJourneyApp:
         self.tree.bind("<<TreeviewSelect>>", self.on_select)
 
     # ================= 필터 함수 =================
-    def apply_filter(self):
+    def apply_filter(self, event=None):
         field = self.filter_field.get()      # id, dx, gender, age
         value = self.entry.get().strip()
 
