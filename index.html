@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Patient Journey Mapping</title>
+    
+    <link rel="stylesheet" href="./stylesheet.css" (type="text/css") />
+</head>
+<body>
+
+    <div class="header">
+        <h1>Patient Journey Mapping</h1>
+    </div>
+
+    <div class="main-container">
+        <div class="left-panel">
+            <div class="profile-btn" onclick="toggleList()">
+                <img src="profile.png" alt="Patient" onerror="this.src='https://via.placeholder.com/100?text=Click'">
+            </div>
+            <div class="profile-info" id="currentSummary">
+                <p><strong>ID:</strong> 10900020115</p>
+                <p><strong>DX:</strong> Sepsis</p>
+                <p><strong>SEX:</strong> F</p>
+                <p><strong>AGE:</strong> 87</p>
+            </div>
+            <p style="font-size: 11px; color: #888; margin-top: auto;">* Click image to change patient</p>
+        </div>
+
+        <div class="list-overlay" id="listOverlay">
+            <div class="search-area">
+                <select id="filterField">
+                    <option value="id">ID</option>
+                    <option value="dx" selected>DX</option>
+                    <option value="sex">SEX</option>
+                    <option value="age">AGE</option>
+                </select>
+                <input type="text" id="searchInput" placeholder="Search and Enter..." onkeypress="if(event.keyCode==13) applyFilter()">
+                <button onclick="toggleList()" style="background:#333; color:white; border:none; padding:5px 10px; cursor:pointer;">X</button>
+            </div>
+            <div class="table-wrap">
+                <table id="patientTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>DX</th>
+                            <th>SEX</th>
+                            <th>AGE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="metrics-container">
+                <div class="metric-box"><div class="metric-label">SOFA Score</div></div>
+                <div class="metric-box"><div class="metric-label">I / O</div></div>
+                <div class="metric-box"><div class="metric-label">Vital Sign</div></div>
+            </div>
+
+            <div class="journey-container">
+                <div class="journey-header">
+                    <span id="detailTitle" style="font-weight:bold;">Timeline: Patient 10900020115</span>
+                    <select><option>Day View</option></select>
+                </div>
+                <div class="timeline-grid">
+                    <table class="grid-table">
+                        <thead>
+                            <tr>
+                                <th>Category</th><th>Sub</th><th>Day 1</th><th>Day 2</th><th>Day 3</th><th>Day 4</th><th>Day 5</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td rowspan="3" class="category-header">Medication</td>
+                                <td style="background:#fafafa; font-weight:bold;">A</td>
+                                <td class="bar-orange">Antibiotic</td><td class="bar-orange">Antibiotic</td><td></td><td></td><td></td>
+                            </tr>
+                            <tr>
+                                <td style="background:#fafafa; font-weight:bold;">B</td>
+                                <td></td><td class="bar-purple">Vasopressor</td><td class="bar-purple">Vasopressor</td><td></td><td></td>
+                            </tr>
+                            <tr class="group-end">
+                                <td style="background:#fafafa; font-weight:bold;">C</td>
+                                <td>Fluid</td><td>Fluid</td><td>Fluid</td><td>Fluid</td><td></td>
+                            </tr>
+
+                            <tr>
+                                <td rowspan="3" class="category-header">Symptoms</td>
+                                <td style="background:#fafafa; font-weight:bold;">General</td>
+                                <td class="bar-red">Fever</td><td>High Fever</td><td></td><td>Normal</td><td></td>
+                            </tr>
+                            <tr>
+                                <td style="background:#fafafa; font-weight:bold;">GI</td>
+                                <td></td><td>Nausea</td><td>Vomiting</td><td></td><td></td>
+                            </tr>
+                            <tr class="group-end">
+                                <td style="background:#fafafa; font-weight:bold;">Neuro</td>
+                                <td>Drowsy</td><td></td><td></td><td>Headache</td><td>Alert</td>
+                            </tr>
+
+                            <tr>
+                                <td rowspan="3" class="category-header">Complains</td>
+                                <td style="background:#fafafa; font-weight:bold;">Pain</td>
+                                <td>✔</td><td>✔</td><td>✔</td><td></td><td></td>
+                            </tr>
+                            <tr>
+                                <td style="background:#fafafa; font-weight:bold;">Resp</td>
+                                <td>Dyspnea</td><td></td><td></td><td></td><td></td>
+                            </tr>
+                            <tr class="group-end">
+                                <td style="background:#fafafa; font-weight:bold;">Other</td>
+                                <td>Chills</td><td></td><td></td><td>Fatigue</td><td></td>
+                            </tr>
+
+                            <tr>
+                                <td rowspan="3" class="category-header">Procedure</td>
+                                <td style="background:#fafafa; font-weight:bold;">Main</td>
+                                <td class="bar-blue">Intubation</td><td class="bar-blue">Ventilator</td><td class="bar-blue">Ventilator</td><td>Extubation</td><td></td>
+                            </tr>
+                            <tr>
+                                <td style="background:#fafafa; font-weight:bold;">Line</td>
+                                <td>C-Line</td><td></td><td>A-Line</td><td></td><td></td>
+                            </tr>
+                            <tr class="group-end">
+                                <td style="background:#fafafa; font-weight:bold;">Exam</td>
+                                <td>CT Scan</td><td></td><td>X-Ray</td><td></td><td>Echo</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="notes-area">
+                <label style="font-size:12px; font-weight:bold;">Treatment & Recovery Notes</label>
+                <textarea placeholder="Enter notes here..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
