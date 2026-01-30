@@ -1,7 +1,7 @@
 // 1. 전역 변수 설정
 let allPatients = [];
 let tooltipData = {};
-let myChart = null; // 차트 인스턴스를 저장할 전역 변수
+let myChart = null; 
 
 // 2. 페이지 로드 시 실행
 window.onload = function() {
@@ -33,36 +33,37 @@ function updateProfileInfo(p) {
     const summaryBox = document.getElementById('currentSummary');
     if (!summaryBox) return;
 
-    // 데이터 형식에 따른 ID 처리 (stay_id가 없으면 pid 사용)
     const rawId = p.stay_id || p.pid || 'Unknown';
-    const displayId = String(rawId).length > 15 ? String(rawId).substring(0, 15) + "..." : rawId;
+    const latestProb = (p.probabilities && p.probabilities.length > 0) 
+        ? (p.probabilities[p.probabilities.length - 1] * 100).toFixed(1) 
+        : '0.0';
 
-    // 프로필 정보 레이아웃 (기존 필드와 시계열 정보 통합)
+    // 프로필 정보 레이아웃 (HTML 구조 개선)
     summaryBox.innerHTML = `
-        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; line-height: 1.6;">
-            <p><strong>ID:</strong> ${rawId}</p>
-            ${p.dx ? `<p><strong>Diagnosis:</strong> ${p.dx}</p>` : ''}
-            ${p.age ? `<p><strong>Age/Sex:</strong> ${p.age} (${p.sex || '-'})</p>` : ''}
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; line-height: 1.6; border-left: 5px solid #4e73df;">
+            <p style="margin-bottom: 5px;"><strong>ID:</strong> ${rawId}</p>
+            <p style="margin-bottom: 5px;"><strong>Diagnosis:</strong> ${p.dx || 'N/A'}</p>
+            <p style="margin-bottom: 5px;"><strong>Age/Sex:</strong> ${p.age || '-'} (${p.sex || '-'})</p>
             <hr style="border: 0; border-top: 1px solid #ddd; margin: 10px 0;">
             ${p.time_series ? `
                 <p><strong>Data Points:</strong> ${p.time_series.length} slots</p>
-                <p><strong>Latest Risk:</strong> ${(p.probabilities[p.probabilities.length - 1] * 100).toFixed(1)}%</p>
+                <p><strong>Latest Risk Score:</strong> <span style="color: ${latestProb > 50 ? '#e74a3b' : '#4e73df'}; font-weight: bold;">${latestProb}%</span></p>
             ` : '<p style="color:orange;">시계열 데이터가 없는 환자입니다.</p>'}
         </div>
     `;
 
     const detailTitle = document.getElementById('detailTitle');
-    if (detailTitle) detailTitle.innerText = `Analysis: Patient ${p.pid || 'Detail'}`;
+    if (detailTitle) detailTitle.innerText = `Analysis: Patient ${p.pid || rawId}`;
 
-    // 시계열 데이터가 있을 때만 차트 렌더링
+    // 시계열 차트 렌더링
     if (p.time_series && p.probabilities) {
         renderTimelineChart(p);
     } else if (myChart) {
-        myChart.destroy(); // 데이터 없으면 기존 차트 제거
+        myChart.destroy();
     }
 }
 
-// 4. 리스트 테이블 갱신
+// 4. 리스트 테이블 갱신 (헤더 개수: ID | Diagnosis | Sex | Age | Status)
 function refreshTable(data) {
     const tbody = document.querySelector("#patientTable tbody");
     if (!tbody) return;
@@ -73,26 +74,27 @@ function refreshTable(data) {
         const tr = document.createElement("tr");
         tr.style.cursor = "pointer";
         
-        // 1. 데이터 추출 (성별, 나이, 데이터 포인트 등)
         const idToShow = p.stay_id || p.pid || '-';
         const dxToShow = p.dx || 'N/A';
-        const sexToShow = p.sex || '-';   // 이 부분이 누락되었을 가능성이 큽니다.
+        const sexToShow = p.sex || '-';
         const ageToShow = p.age || '-';
-        const dataCount = p.time_series ? `${p.time_series.length}건` : "정보 없음";
-        const status = (p.actual_labels && p.actual_labels.includes(1.0)) ? "⚠️ Event" : "Normal";
+        const isEvent = (p.actual_labels && p.actual_labels.includes(1.0));
+        const statusTag = isEvent 
+            ? '<span style="color: #e74a3b; font-weight: bold;">⚠️ Event</span>' 
+            : '<span style="color: #1cc88a;">Normal</span>';
 
-        // 2. HTML 헤더(ID | DX | SEX | AGE | Points | Status) 순서에 정확히 맞춤
-        // 만약 HTML 헤더 개수가 다르다면 이 부분을 헤더 개수와 동일하게 맞추세요.
         tr.innerHTML = `
             <td>${idToShow}</td>
             <td title="${dxToShow}">${dxToShow.length > 15 ? dxToShow.substring(0, 15) + '...' : dxToShow}</td>
             <td>${sexToShow}</td>
             <td>${ageToShow}</td>
+            <td>${statusTag}</td>
         `;
         
         tr.onclick = function() {
             updateProfileInfo(p);
-            toggleList();
+            // 모바일 환경 등에서 리스트 팝업을 닫는 기능
+            if (typeof toggleList === "function") toggleList(); 
         };
         tbody.appendChild(tr);
     });
@@ -104,20 +106,19 @@ function toggleList() {
     if (overlay) overlay.classList.toggle('active');
 }
 
-// 6. 검색 필터링 (필드명 대응 수정)
+// 6. 검색 필터링 (안전한 문자열 비교)
 function applyFilter() {
     const field = document.getElementById("filterField").value;
     const value = document.getElementById("searchInput").value.toLowerCase();
     
     const filtered = allPatients.filter(p => {
-        // field가 id일 경우 stay_id와 pid 둘 다 검색 허용
-        let target;
+        let targetValue = "";
         if (field === 'id') {
-            target = p.stay_id || p.pid;
+            targetValue = String(p.stay_id || p.pid || "");
         } else {
-            target = p[field];
+            targetValue = String(p[field] || "");
         }
-        return String(target || '').toLowerCase().includes(value);
+        return targetValue.toLowerCase().includes(value);
     });
     
     refreshTable(filtered);
@@ -151,7 +152,7 @@ function renderTimelineChart(p) {
                     borderColor: '#e74a3b',
                     pointBackgroundColor: '#e74a3b',
                     pointStyle: 'rectRot',
-                    radius: 6,
+                    radius: 8,
                     showLine: false,
                     yAxisID: 'y'
                 }
@@ -163,8 +164,14 @@ function renderTimelineChart(p) {
             scales: {
                 y: {
                     beginAtZero: true,
-                    max: 1,
+                    max: 1.1, // 이벤트 마커가 잘리지 않게 약간 여유를 줌
                     title: { display: true, text: 'Probability' }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    mode: 'index',
+                    intersect: false
                 }
             }
         }
