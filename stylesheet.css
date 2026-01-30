@@ -1,7 +1,7 @@
 :root {
-    --primary-blue: #4a76a8;
-    --light-bg: #f0f4f7;
-    --border-color: #ccc;
+--primary-blue: #4a76a8;
+--light-bg: #f0f4f7;
+--border-color: #ccc;
 }
 
 body {
@@ -23,16 +23,70 @@ body {
 
 /* Left Panel */
 .left-panel {
-    flex: 0 0 280px; background-color: white; border-right: 1px solid var(--border-color);
-    display: flex; flex-direction: column; padding: 15px;
+    flex: 0 0 280px;
+    background-color: white;
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    overflow-y: auto; /* 내용이 많아지면 왼쪽 패널만 스크롤 되도록 설정 */
+    margin: 0;
 }
 .profile-btn {
     width: 100px; height: 100px; background-color: #eee; border-radius: 50%; 
     margin: 0 auto 15px; overflow: hidden; cursor: pointer; border: 2px solid #ddd;
+    margin-top: 3vh;
 }
 .profile-btn img { width: 100%; height: 100%; object-fit: cover; }
 .profile-info p { margin: 8px 0; font-size: 14px; }
 .profile-info strong { color: var(--primary-blue); display: inline-block; width: 70px; }
+
+.svg-wrapper {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center; /* 가로 중앙 */
+    align-items: center;     /* 세로 중앙 */
+    overflow: hidden;        /* 넘치는 거대한 캔버스 절단 */
+}
+
+.svg-wrapper svg {
+    /* 기존의 scale(1) 또는 큰 scale 대신, 
+    wrapper 크기에 맞게 width를 100%로 주고 viewBox로 조절하는 게 정석입니다. */
+    width: 250%;  /* 그림이 우측에 있으므로 크기를 키워 중앙으로 당길 준비 */
+    height: auto;
+    transform: translateX(-20%); /* 우측으로 치우친 만큼 왼쪽으로 강제 이동 */
+}
+.body,
+#kneeL,
+#kneeR,
+#footL,
+#footR,
+#neck,
+#handL,
+#handR,
+#heart,
+#mouth {
+    fill: #4a76a8;
+}
+
+svg {
+    display: block;
+}
+svg path {
+    cursor: pointer;
+}
+
+#tooltip {
+    position: absolute;
+    background: #111;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    display: none;
+    pointer-events: none;
+}
 
 /* Right Panel */
 .right-panel { flex: 1; display: flex; flex-direction: column; overflow-y: auto; padding: 10px; gap: 10px; }
