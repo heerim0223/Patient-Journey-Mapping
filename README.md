@@ -1,12 +1,20 @@
 # Patient-Journey-Mapping
 
+<img width="1920" height="944" alt="Image" src="https://github.com/user-attachments/assets/e055d7e1-cd7b-48d3-b073-5e3b9641b3b5" />
 
+**How To Use**
+1. 프로필 이미지를 누르면 환자 목록이 나타납니다.
+2. 환자 목록을 누르면 환자별 정보가 불러와지며, 각 환자별 상태가 시각화됩니다.   
+3. 좌측하단의 인체 모형에 마우스를 가져가면 정확한 정보가 보여집니다.
+4. 우측 하단의 입력창과 전송버튼을 통해 환자의 특이사항 기록이 서버로 저장됩니다.
+(아직 미구현이지만, 환자 정보를 전송하면 영구적으로 변하기는 합니다.)
 
 ---
 
-# Functional necessities
+# ERD(csv->sql)
 
-### 1. Time-Based Event Sequence
+<img src="ERD.svg" width="600" />
+
 > ```
 > KMIMIC_EMR/260~460
 > ├─ ADMISSIONS.csv  
