@@ -1,6 +1,6 @@
 # Patient-Journey-Mapping
 
-<img width="1920" height="944" alt="Image" src="https://github.com/user-attachments/assets/e055d7e1-cd7b-48d3-b073-5e3b9641b3b5" />
+<img src="main.png" width="1920" />
 [참조링크]: https://heerim0223.github.io/Patient-Journey-Mapping/
 
 ### How To Use
@@ -14,7 +14,7 @@
 
 # ERD(csv->sql)
 
-<img src="ERD.svg" width="600" />
+<img src="ERD.svg" width="1920" />
 
 > ```
 > KMIMIC_EMR/260~460
