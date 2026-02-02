@@ -1,65 +1,145 @@
 # Patient-Journey-Mapping
 
-<img width="1005" height="697" alt="Image" src="https://github.com/user-attachments/assets/980afaaa-e5e8-460c-9498-8211e7a48f70" />
+
 
 ---
 
 # Functional necessities
 
 ### 1. Time-Based Event Sequence
-> A chronological list of patient events along the hospitalization timeline:
 > ```
-> ER (Start)
-> ├── Discharge / Death / Transfer (Final)
-> ├── ICU
-> │    ├── Discharge / Death / Transfer (Final)
-> │    └── Ward
-> │         ├── Discharge / Death / Transfer (Final)
-> │         └── **ICU (Readmission)**
-> │              └── Discharge / Death (Final)
-> └── Ward
->      ├── Discharge / Death / Transfer (Final)
->      └── ICU (Transfer)
->           ├── Discharge / Death / Transfer (Final)
->           └── Ward (Back to Ward)
->                └── Discharge / Death (Final)
+> KMIMIC_EMR/260~460
+> ├─ ADMISSIONS.csv  
+> │  ├─ SUBJECT_ID, HADM_ID, ADMITTIME, DISCHTIME, DEATHTIME  
+> │  ├─ ADMISSION_TYPE, ADMISSION_LOCATION, DISCHARGE_LOCATION  
+> │  ├─ INSURANCE, LANGUAGE, MARITAL_STATUS, ETHNICITY  
+> │  ├─ EDREGTIME, EDOUTTIME  
+> │  ├─ HOSPITAL_EXPIRE_FLAG, ICU_EXPIRE_FLAG  
+> │  ├─ NATIONALITY, HOSPITAL_ID  
+> │  
+> ├─ CHARTEVENTS.csv  
+> │  ├─ CHARTEVENT_ID, SUBJECT_ID, HADM_ID, STAY_ID  
+> │  ├─ CHARTTIME, STORETIME, ITEMID  
+> │  ├─ VALUE, VALUENUM, VALUEUOM, WARNING  
+> │  
+> ├─ DATETIMEEVENTS.csv  
+> │  ├─ DATETIMEEVENT_ID, SUBJECT_ID, HADM_ID, STAY_ID  
+> │  ├─ CHARTTIME, STORETIME, ITEMID  
+> │  ├─ VALUE, VALUEUOM, WARNING  
+> │  
+> ├─ DIAGNOSES_ICD.csv  
+> │  ├─ SUBJECT_ID, HADM_ID, SEQ_NUM  
+> │  ├─ ICD_CODE, ICD_VERSION, ITEMID, IS_ICU  
+> │  
+> ├─ D_ITEMS.csv  
+> │  ├─ ITEMID, LABEL, ABBREVIATION, LINKSTO  
+> │  ├─ CATEGORY, UNITNAME, PARAM_TYPE  
+> │  ├─ LOWNORMALVALUE, HIGHNORMALVALUE  
+> │  
+> ├─ D_LABITEMS.csv  
+> │  ├─ ITEMID, LABEL, FLUID, CATEGORY, EDI_CODE  
+> │  
+> ├─ D_TESTITEMS.csv  
+> │  ├─ ITEMID, LABEL, CATEGORY, EDI_CODE  
+> │  
+> ├─ EDSTAY.csv  
+> │  ├─ SUBJECT_ID, STAY_ID, INTIME, OUTTIME, SEX  
+> │  ├─ DX1~DX9, DX1_ICD~DX9_ICD  
+> │  
+> ├─ EMAR.csv  
+> │  ├─ SUBJECT_ID, HADM_ID, EMAR_ID, EMAR_SEQ  
+> │  ├─ POE_ID, PHARMACY_ID  
+> │  ├─ CHARTTIME, STORETIME  
+> │  ├─ MEDICATION, EVENT_TXT, EMAR_TYPE  
+> │  ├─ ITEMID, STAY_ID  
+> │  
+> ├─ EMAR_DETAIL.csv  
+> │  ├─ SUBJECT_ID, HADM_ID, EMAR_ID, EMAR_SEQ  
+> │  ├─ PARENT_FIELD_ORDINAL, PHARMACY_ID  
+> │  ├─ NOTE_TXT, ON_OFF  
+> │  ├─ INFUSION_RATE_DAY, HR, MIN  
+> │  ├─ ITEMID, STAY_ID  
+> │  
+> ├─ HOSPITAL.csv  
+> │  ├─ HOSPITAL_ID, STATUS  
+> │  
+> ├─ ICUSTAYS.csv  
+> │  ├─ SUBJECT_ID, HADM_ID, STAY_ID  
+> │  ├─ FIRST_CAREUNIT, LAST_CAREUNIT  
+> │  ├─ INTIME, OUTTIME, LOS, OP_FLAG  
+> │  
+> ├─ INPUTEVENTS.csv  
+> │  ├─ INPUTEVENT_ID, SUBJECT_ID, HADM_ID, ICUSTAY_ID  
+> │  ├─ STARTTIME, ENDTIME, ITEMID  
+> │  ├─ AMOUNT, AMOUNTUOM, RATE, RATEUOM  
+> │  ├─ PATIENTWEIGHT, STORETIME, CGID  
+> │  ├─ ORDERID, LINKORDERID  
+> │  
+> ├─ LABEVENTS.csv  
+> │  ├─ LABEVENT_ID, SUBJECT_ID, HADM_ID, SPECIMEN_ID  
+> │  ├─ ITEMID, CHARTTIME, STORETIME  
+> │  ├─ VALUE, VALUENUM, VALUEUOM  
+> │  ├─ REF_RANGE_LOWER, REF_RANGE_UPPER  
+> │  ├─ FLAG, COMMENTS, STAY_ID  
+> │  
+> ├─ MEDRECON.csv  
+> │  ├─ STAY_ID, CHARTTIME, NAME, GSN, NDC  
+> │  
+> ├─ MICROBIOLOGYEVENTS.csv  
+> │  ├─ MICROEVENT_ID, SUBJECT_ID, HADM_ID  
+> │  ├─ MICRO_SPECIMEN_ID, SPEC_ITEMID, SPEC_TYPE_DESC  
+> │  ├─ TEST_ITEMID, TEST_NAME  
+> │  ├─ ORG_ITEMID, ORG_NAME, ISOLATE_NUM  
+> │  ├─ AB_ITEMID, AB_NAME  
+> │  ├─ INTERPRETATION, COMMENTS  
+> │  ├─ ORDERDATE, ORDER_COMMENTS, STAY_ID  
+> │  
+> ├─ OUTPUTEVENTS.csv  
+> │  ├─ OUTPUTEVENT_ID, SUBJECT_ID, HADM_ID, ICUSTAY_ID  
+> │  ├─ CHARTTIME, STORETIME  
+> │  ├─ ITEMID, VALUE, VALUEUOM, WARNING  
+> │  
+> ├─ PATIENTS.csv  
+> │  ├─ SUBJECT_ID, SEX  
+> │  ├─ ANCHOR_AGE, ANCHOR_YEAR, ANCHOR_YEAR_GROUP  
+> │  ├─ DOD  
+> │  
+> ├─ PRESCRIPTIONS.csv  
+> │  ├─ SUBJECT_ID, HADM_ID, PHARMACY_ID  
+> │  ├─ STARTTIME, STOPTIME  
+> │  ├─ DRUG_TYPE, DRUG  
+> │  ├─ DOSE_VAL_RX, DOSE_UNIT_RX  
+> │  ├─ ROUTE, ITEMID, STAY_ID  
+> │  
+> ├─ PROCEDUREEVENTS.csv  
+> │  ├─ PROCEDUREEVENT_ID, SUBJECT_ID, HADM_ID, STAY_ID  
+> │  ├─ STARTTIME, ENDTIME, ITEMID  
+> │  ├─ VALUE, VALUEUOM  
+> │  ├─ LOCATION, ORDERCATEGORYNAME  
+> │  ├─ PATIENTWEIGHT  
+> │  
+> ├─ PROCEDURES_ICD.csv  
+> │  ├─ SUBJECT_ID, HADM_ID, SEQ_NUM  
+> │  ├─ CHARTDATE, ICD_CODE, ICD_VERSION  
+> │  ├─ ITEMID, STAY_ID  
+> │  
+> ├─ SERVICES.csv  
+> │  ├─ SUBJECT_ID, HADM_ID  
+> │  ├─ TRANSFERTIME, PREV_SERVICE, CURR_SERVICE  
+> │  
+> ├─ TESTEVENTS.csv  
+> │  ├─ TESTEVENT_ID, SUBJECT_ID, HADM_ID  
+> │  ├─ ITEMID, CHARTTIME, STORETIME  
+> │  ├─ FILE_PATH, STAY_ID  
+> │  
+> ├─ TRANSFERS.csv  
+> │  ├─ SUBJECT_ID, HADM_ID, TRANSFER_ID  
+> │  ├─ EVENTTYPE, CAREUNIT  
+> │  ├─ INTIME, OUTTIME  
+> │  
+> └─ TRIAGE.csv  
+>    ├─ STAY_ID  
+>    ├─ TEMP, HR, RR, SAO2  
+>    ├─ PAIN, ACUITY  
+>    ├─ SBP, DBP  
 > ```
-
-This sequence represents the progression of a patient through different clinical locations and outcomes during a single hospital stay.
-
-### 2. Sankey / Flow Visualization
-> Visualization of patient flow across hospital units and outcomes.
-> 
-> Flow Scenarios (All Patients)
-> 
-> ER → ICU → Ward → Discharge
-> 
-> ER → Ward → Death
-> 
-> Visualization Details
-> 
-> Metric: Number of patients
-> 
-> Chart Type: Sankey diagram
-> 
-> Libraries:matplotlib (with Sankey module), or plotly (recommended for interactive visualization)
-> 
-> GUI Integration: Can be embedded into a Tkinter application
-
-These visualizations help illustrate patient movement patterns and outcome distributions across care units.
-
-### 3. Automated Clinical Summary Generation
-> Automatically generated summary for each patient:
-> ```
-> Total Length of Stay: 12.4 days
-> ICU Stay: Yes (3.2 days)
-> Primary Diagnosis: Sepsis
-> Key Laboratory Trends:
-> WBC ↑ (Day 1–2)
-> CRP ↓ (After Day 4)
-> Outcome: Discharged Alive
-> ```
-
-This summary provides a concise overview of the patient’s clinical course, key laboratory changes, and final outcome.
-
-[SQL 테이블](https://www.notion.so/SQL-2ebb67426ab180a892fcf3356d6c67ce?source=copy_link)
