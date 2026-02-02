@@ -1,0 +1,142 @@
+:root {
+--primary-blue: #4a76a8;
+--light-bg: #f0f4f7;
+--border-color: #ccc;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0; padding: 0;
+    background-color: var(--light-bg);
+    display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+}
+
+/* Header */
+.header {
+    background-color: var(--primary-blue); color: white;
+    padding: 0 15px; height: 45px;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.header h1 { margin: 0; font-size: 18px; font-weight: 500; }
+
+.main-container { display: flex; flex: 1; overflow: hidden; position: relative; }
+
+/* Left Panel */
+.left-panel {
+    flex: 0 0 280px;
+    background-color: white;
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    overflow-y: auto; /* 내용이 많아지면 왼쪽 패널만 스크롤 되도록 설정 */
+    margin: 0;
+}
+.profile-btn {
+    width: 100px; height: 100px; background-color: #eee; border-radius: 50%; 
+    margin: 0 auto 15px; overflow: hidden; cursor: pointer; border: 2px solid #ddd;
+    margin-top: 3vh;
+}
+.profile-btn img { width: 100%; height: 100%; object-fit: cover; }
+.profile-info p { margin: 8px 0; font-size: 14px; }
+.profile-info strong { color: var(--primary-blue); display: inline-block; width: 70px; }
+
+.svg-wrapper {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center; /* 가로 중앙 */
+    align-items: center;     /* 세로 중앙 */
+    overflow: hidden;        /* 넘치는 거대한 캔버스 절단 */
+}
+
+.svg-wrapper svg {
+    /* 기존의 scale(1) 또는 큰 scale 대신, 
+    wrapper 크기에 맞게 width를 100%로 주고 viewBox로 조절하는 게 정석입니다. */
+    width: 250%;  /* 그림이 우측에 있으므로 크기를 키워 중앙으로 당길 준비 */
+    height: auto;
+    transform: translateX(-20%); /* 우측으로 치우친 만큼 왼쪽으로 강제 이동 */
+}
+.body,
+#kneeL,
+#kneeR,
+#footL,
+#footR,
+#neck,
+#handL,
+#handR,
+#heart,
+#mouth {
+    fill: #4a76a8;
+}
+
+svg {
+    display: block;
+}
+svg path {
+    cursor: pointer;
+}
+
+#tooltip {
+    position: absolute;
+    background: #111;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    display: none;
+    pointer-events: none;
+}
+
+/* Right Panel */
+.right-panel { flex: 1; display: flex; flex-direction: column; overflow-y: auto; padding: 10px; gap: 10px; }
+
+.metrics-container { display: flex; gap: 10px; height: 140px; }
+.metric-box { flex: 1; background: white; border: 1px solid var(--border-color); border-radius: 4px; padding: 10px; }
+.metric-label { font-size: 12px; font-weight: bold; color: #666; border-bottom: 1px solid #eee; margin-bottom: 5px; }
+
+/* Timeline Grid */
+.journey-container { flex: 1; background: white; border: 1px solid var(--border-color); border-radius: 4px; display: flex; flex-direction: column; }
+.journey-header { background: #f8f9fa; border-bottom: 1px solid var(--border-color); padding: 8px 15px; display: flex; justify-content: space-between; }
+.timeline-grid { flex: 1; overflow: auto; padding: 10px; }
+
+.grid-table { width: 100%; border-collapse: collapse; min-width: 600px; font-size: 12px; }
+.grid-table th, .grid-table td { border: 1px solid #eee; padding: 6px; text-align: center; }
+.category-header { background-color: #f9f9f9; font-weight: bold; width: 100px; vertical-align: middle !important; }
+.group-end td { border-bottom: 2px solid #ccc !important; }
+
+/* Modal Pop-up (Updated) */
+.list-overlay {
+    display: none; position: absolute; top: 10px; left: 10px;
+    width: 400px; height: 90%; background: white;
+    box-shadow: 5px 5px 20px rgba(0,0,0,0.3); border: 1px solid #999; z-index: 1000;
+    flex-direction: column; border-radius: 8px;
+}
+.list-overlay.active { display: flex; }
+.search-area { padding: 10px; background: #f1f1f1; display: flex; gap: 5px; border-bottom: 1px solid #ccc; }
+.search-area input { flex: 1; padding: 5px; }
+.table-wrap { flex: 1; overflow-y: auto; }
+
+#patientTable { width: 100%; border-collapse: collapse; font-size: 13px; }
+#patientTable th { background: var(--primary-blue); color: white; padding: 10px; position: sticky; top: 0; }
+#patientTable td { padding: 8px; border-bottom: 1px solid #eee; cursor: pointer; text-align: center; }
+#patientTable tr:hover { background: #f1f7ff; }
+
+.notes-area { background: white; border: 1px solid var(--border-color); padding: 10px; height: 100px; display: flex; flex-direction: column; }
+.notes-area textarea { flex: 1; border: 1px solid #eee; margin-top: 5px; resize: none; padding: 8px; }
+.notes-area button {
+    padding: 6px 10px;
+    background: #4e73df;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.notes-area button:hover { opacity: 0.95; }
+
+.svg-highlight {
+    transition: fill 0.15s ease, stroke 0.15s ease;
+    /* fallback 색 (JS가 적용되므로 필수는 아니지만 안전장치로 둡니다) */
+    fill: #e74a3b !important;
+    stroke: #b92b2b !important;
+}
